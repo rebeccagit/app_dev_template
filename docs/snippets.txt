@@ -1,0 +1,247 @@
+
+//*****************************************************************************************************************
+//***Gruntfile.js
+//******************************************************************************************************************
+
+    // Load the plugins.
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+
+//---------------------------------------------------------------------------------------------------
+
+            //add concat task configurations
+            options: {
+                separator: '\n\n//------------------------------------------------\n\n',
+                stripBanners: true
+            },
+            dist: {
+                src: ['source/assets/js/plugins/*.js'],
+                dest: 'www/assets/js/plugin.js'
+            },
+
+//---------------------------------------------------------------------------------------------------
+
+            //add copy task configurations
+            options:{mode: true},
+            root: {
+                files:[
+                    {expand: true, flatten: true, src: 'source/*.html', dest: 'www/', filter: 'isFile'},
+                    {expand: true, flatten: true, src: 'source/*.ico', dest: 'www/', filter: 'isFile'}
+                ]
+            },
+            images: {
+                files:[
+                    {expand: true, flatten: true, src: 'source/assets/img/*.*', dest: 'www/assets/img', filter: 'isFile'},
+                ]
+            },
+            js: {
+                files:[
+                    {expand: true, flatten: true, src: 'source/assets/js/*.js', dest: 'www/assets/js/', filter: 'isFile'},
+                ]
+            },
+            jslibs: {
+                files:[
+                    {expand: true, flatten: true, src: 'source/assets/js/libs/*.*', dest: 'www/assets/js/libs/', filter: 'isFile'},
+                ]
+            }
+
+
+//---------------------------------------------------------------------------------------------------
+
+
+        //add the sass task configurations
+        sass: {
+            options: {
+                style: 'expanded',
+                sourcemap: 'none'
+            },
+            dist: {
+                files: [{
+                    src: ['source/assets/css/*.scss'],
+                    dest: 'www/assets/css',
+                    ext: '.css',
+                    expand: true,
+                    flatten: true
+                }]
+            }
+
+//---------------------------------------------------------------------------------------------------
+
+
+            //add the watch task configurations
+            options: {
+                spawn: false,
+                livereload: true
+            } ,
+            configFiles: {
+                files: ['Gruntfile.js'],
+                tasks: ['concat', 'copy', 'sass'],
+            },
+            copy:{
+                files: ['source/*.*', 'source/assets/img/*.*', 'source/assets/js/libs/*.*', 'source/assets/js/*.*'],
+                tasks: ['copy']
+            },
+            css: {
+                files: ['source/assets/css/*.*'],
+                tasks: ['sass'],
+
+            },
+            concat:{
+                files: [
+                    'source/assets/js/plugins/*.*'
+                ],
+                tasks: ['concat']
+            }
+
+//---------------------------------------------------------------------------------------------------
+
+
+            //add the connect middleware configurations
+            server: {
+                options: {
+                    port: 3030,
+                    hostname: 'localhost',
+                    base: './www',
+                    livereload: true,
+                    open: true
+                }
+            }
+
+//---------------------------------------------------------------------------------------------------
+    // Default task(s).
+    grunt.registerTask('default', ['sass', 'concat', 'copy', 'connect', 'watch']);
+
+
+//*****************************************************************************************************************
+//***index.html
+//******************************************************************************************************************
+
+            //call the init and loadView methods
+            RJSW.init();
+            RJSW.loadView();
+
+//*****************************************************************************************************************
+//***app.scss
+//******************************************************************************************************************
+
+$body_link: #49796B;
+$body_link_hover: #013220;
+
+$footer_link: #606060;
+$footer_link_hover: #202020;
+
+body{
+  font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+  font-size: 14pt;
+  color: #454545;
+}
+a{
+  text-decoration: none;
+  color:$body_link;
+}
+a:hover{
+  color:$body_link_hover;
+}
+#container{
+  max-width: 840px;
+  margin: 20px auto;
+}
+
+#title{
+  text-align: left;
+  font-size: 2.0em;
+}
+
+#content{margin: 30px 0;}
+
+.data-head{
+  display: table-header-group;
+  .data-row{
+    display: table-row;
+
+    .data-cell{
+      display: table-cell;
+      font-weight: 600;
+      font-size: 1.3em;
+      text-align: left;
+      padding-bottom: 5px;
+    }
+  }
+}
+.data-row{display: table-row;}
+.data-cell{
+  display: table-cell;
+  padding: 5px
+}
+
+#footer{
+  text-align: center;
+  .foot-item{
+    display: inline-block;
+    margin: 10px;
+    a{
+      color:$footer_link;
+    }
+    a:hover{
+      color:$footer_link_hover;
+    }
+  }
+
+}
+
+//*****************************************************************************************************************
+//***app.js
+//*****************************************************************************************************************
+
+        //maps in all of the data and view's methods and properties to the object
+        rsjw.data.title =  rsjw.plugin_config.page_title;
+        rsjw.data.text = rsjw.plugin_config.intro;
+        rsjw.data.header = rsjw.plugin_data.header;
+        rsjw.data.body = rsjw.plugin_data.body;
+        rsjw.data.footer = rsjw.plugin_data.footer;
+        rsjw.view.schema = rsjw.plugin_config.display_schema;
+        rsjw.view.loadTitle = rsjw.plugin_ui.loadTitle;
+        rsjw.view.loadBody = rsjw.plugin_ui.loadBody;
+        rsjw.view.loadFooter = rsjw.plugin_ui.loadFooter;
+
+
+//*****************************************************************************************************************
+//***plugin_data.js
+//*****************************************************************************************************************
+
+    //three data arrays used to populated the page
+    header: ["Book Title"],
+    body: [
+        {title: "JavaScript and JQuery: Interactive Front-End Web Development",
+            url: "http://www.amazon.com/JavaScript-JQuery-Interactive-Front-End-Development/dp/1118531647"},
+        {title: "A Smarter Way to Learn JavaScript: The new approach that uses technology to cut your effort in half",
+            url: "http://www.amazon.com/Smarter-Way-Learn-JavaScript-technology/dp/1497408180"},
+        {title: "JavaScript: The Good Parts",
+            url: "http://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742"},
+        {title: "JavaScript: Crash Course - The Ultimate Beginner's Course to Learning JavaScript Programming in Under 12 Hours",
+            url: "http://www.amazon.com/JavaScript-Ultimate-Beginners-Learning-Programming-ebook/dp/B00YQB5JPK"},
+        {title: "JavaScript: The Definitive Guide: Activate Your Web Pages (Definitive Guides)",
+            url: "http://www.amazon.com/JavaScript-Definitive-Guide-Activate-Guides/dp/0596805527"},
+        {title: "The Principles of Object-Oriented JavaScript",
+            url: "http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404"}
+    ],
+    footer: [
+        {text: "Home", url: "//www.mydomain.com"},
+        {text: "Products", url: "//www.mydomain.com/products.html"},
+        {text: "Contact Us", url: "//www.mydomain.com/contact.html"}
+    ]
+
+//---------------------------------------------------------------------------------------------------
+
+        //call the methods to load the title, body and footer
+        RJSW.view.loadTitle(rsjw.view.schema, rsjw.data);
+        RJSW.view.loadBody(rsjw.view.schema, rsjw.data);
+        RJSW.view.loadFooter(rsjw.view.schema, rsjw.data);
+
+
+
+

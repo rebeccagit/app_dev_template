@@ -3,6 +3,7 @@
  */
 
 RJSW.plugin_data = {
+    //three data arrays used to populated the page
     header: ["Book Title"],
     body: [
         {title: "JavaScript and JQuery: Interactive Front-End Web Development",

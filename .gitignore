@@ -1,4 +1,6 @@
 .git
-.sass-cache
-/www
-/node_modules
+/sass_version/.sass-cache
+/sass_version/www
+/sass_version/node_modules
+/less_version/www
+/less_version/node_modules
